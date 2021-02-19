@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PaketkuMana</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="paketkumana">paketkumana</string>
     <string name="lacak_status_dan_posisi_paketmu_dari_nberbagai_kurir_ekspedisi">Ga sabar nunggu paket ya?</string>
     <string name="pilih_kurir">Pilih kurir</string>
     <string name="no_resi">No. Resi</string>
-    <string name="cek_resi">Cek Paketmu!</string>
+    <string name="cek_resi">Cek Resi</string>
     <string name="xxxxxxxx">XXXXXXXX</string>
     <string name="kurir">Kurir</string>
     <string name="layanan">Layanan</string>

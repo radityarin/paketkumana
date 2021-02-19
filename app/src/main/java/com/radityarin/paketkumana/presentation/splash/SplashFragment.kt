@@ -32,7 +32,7 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.appCompatImageView.animate().rotation(360f).setDuration(2000);
+        binding.appCompatImageView.animate().rotation(360f).setDuration(1800);
 
         CoroutineScope(Dispatchers.Main).launch {
             delay(2000)

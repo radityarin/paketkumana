@@ -14,6 +14,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import com.radityarin.paketkumana.R
 import com.radityarin.paketkumana.adapter.StatusAdapter
 import com.radityarin.paketkumana.data.Resource
@@ -29,11 +30,9 @@ class HomeFragment : Fragment() {
     private var isSuccess = true
     private var courieCodePosition = 1
     private var courierCodelist: ArrayList<String> = ArrayList()
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<NestedScrollView>
     private lateinit var statusAdapter: StatusAdapter
     private lateinit var loadingAnimation: AnimationDrawable
     private var isLoading = false
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,9 +61,11 @@ class HomeFragment : Fragment() {
         initCartLoadingAnimation()
 
         statusAdapter = StatusAdapter()
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutBottomSheet)
 
         binding.btnCekResi.setOnClickListener {
+            if(binding.inputResi.text.toString().isEmpty()){
+                binding.inputResi.error = "Isi dulu"
+            }
             startLoadingAnimation()
             lifecycleScope.launch {
                 homeViewModel.getCekResi(
@@ -72,26 +73,22 @@ class HomeFragment : Fragment() {
                     binding.inputResi.text.toString()
                 )
                     .observe(viewLifecycleOwner) { apiResponse ->
-                        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        binding.linearLayout4.visibility = View.VISIBLE
+                        binding.linearLayout5.visibility = View.VISIBLE
+                        binding.tvNoResi.text = apiResponse.cekResi?.summary?.awb
+                        binding.tvKurir.text = apiResponse.cekResi?.summary?.courier
+                        binding.tvLayanan.text = apiResponse.cekResi?.summary?.service
+                        binding.tvTanggal.text = apiResponse.cekResi?.summary?.date
+                        binding.tvPengirim.text = apiResponse.cekResi?.detail?.shipper + " - " + apiResponse.cekResi?.detail?.origin
+                        binding.tvPenerima.text = apiResponse.cekResi?.detail?.receiver + " - " + apiResponse.cekResi?.detail?.destination
 
-                            binding.tvNoResi.text = apiResponse.cekResi?.summary?.awb
-                            binding.tvKurir.text = apiResponse.cekResi?.summary?.courier
-                            binding.tvLayanan.text = apiResponse.cekResi?.summary?.service
-                            binding.tvTanggal.text = apiResponse.cekResi?.summary?.date
-                            binding.tvPengirim.text = apiResponse.cekResi?.detail?.shipper
-                            binding.tvPenerima.text = apiResponse.cekResi?.detail?.receiver
-
-                            statusAdapter.setData(apiResponse.cekResi?.history)
-                            val recyclerViewState =
-                                binding.rvStatus.layoutManager?.onSaveInstanceState()
-                            statusAdapter.notifyDataSetChanged()
-                            binding.rvStatus.layoutManager?.onRestoreInstanceState(recyclerViewState)
-                            binding.rvStatus.adapter = statusAdapter
-                            stopLoadingAnimation()
-                        } else {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                        }
+                        statusAdapter.setData(apiResponse.cekResi?.history)
+                        val recyclerViewState =
+                            binding.rvStatus.layoutManager?.onSaveInstanceState()
+                        statusAdapter.notifyDataSetChanged()
+                        binding.rvStatus.layoutManager?.onRestoreInstanceState(recyclerViewState)
+                        binding.rvStatus.adapter = statusAdapter
+                        stopLoadingAnimation()
                     }
 
 
@@ -128,16 +125,22 @@ class HomeFragment : Fragment() {
                                 setSelection(0, false)
                             }
 
-                            binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                                override fun onNothingSelected(parent: AdapterView<*>?) {
+                            binding.spinner.onItemSelectedListener =
+                                object : AdapterView.OnItemSelectedListener {
+                                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                                    }
+
+                                    override fun onItemSelected(
+                                        parent: AdapterView<*>?,
+                                        view: View?,
+                                        position: Int,
+                                        id: Long
+                                    ) {
+                                        courieCodePosition = position
+                                    }
 
                                 }
-
-                                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                                    courieCodePosition = position
-                                }
-
-                            }
 
                         }
                     }
@@ -156,21 +159,18 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun initCartLoadingAnimation()
-    {
+    private fun initCartLoadingAnimation() {
         binding.ivLoading.setBackgroundResource(R.drawable.anim_loading)
         loadingAnimation = binding.ivLoading.background as AnimationDrawable
     }
 
-    private fun startLoadingAnimation()
-    {
+    private fun startLoadingAnimation() {
         isLoading = true
         binding.ivLoading.visibility = View.VISIBLE
         loadingAnimation.start()
     }
 
-    private fun stopLoadingAnimation()
-    {
+    private fun stopLoadingAnimation() {
         isLoading = false
         binding.ivLoading.visibility = View.INVISIBLE
         loadingAnimation.stop()

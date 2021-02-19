@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -25,7 +26,9 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(view)
 
@@ -34,27 +37,6 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
 
-//        navController.addOnDestinationChangedListener { _, destination, _ ->
-//            if (destination.id == androidx.navigation.ui.R.id.movieFragment || destination.id == androidx.navigation.ui.R.id.tvShowFragment || destination.id == androidx.navigation.ui.R.id.favoriteFragment) {
-//                binding.toolbar.visibility = View.VISIBLE
-//                navView.visibility = View.VISIBLE
-//            } else if (destination.id == androidx.navigation.ui.R.id.settingFragment) {
-//                binding.toolbar.visibility = View.VISIBLE
-//                navView.visibility = View.GONE
-//            } else {
-//                binding.toolbar.visibility = View.GONE
-//                navView.visibility = View.GONE
-//            }
-//        }
-
-//        appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                androidx.navigation.ui.R.id.movieFragment, androidx.navigation.ui.R.id.tvShowFragment, androidx.navigation.ui.R.id.favoriteFragment
-//            )
-//        )
-
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//        navView.setupWithNavController(navController)
     }
 
 }
