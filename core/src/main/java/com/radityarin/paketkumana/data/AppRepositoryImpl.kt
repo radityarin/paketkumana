@@ -6,18 +6,15 @@ import com.radityarin.paketkumana.data.source.remote.network.ApiResponse
 import com.radityarin.paketkumana.data.source.remote.response.cekresi.CekResiResponse
 import com.radityarin.paketkumana.data.source.remote.response.listcourier.ListCourierResponse
 import com.radityarin.paketkumana.domain.model.Courier
-import com.radityarin.paketkumana.domain.repository.IAppRepository
-import com.radityarin.paketkumana.utils.AppExecutors
+import com.radityarin.paketkumana.domain.repository.AppRepository
 import com.radityarin.paketkumana.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class AppRepository(
+class AppRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource,
-    private val appExecutors: AppExecutors
-) : IAppRepository {
-
+    private val localDataSource: LocalDataSource
+) : AppRepository {
 
     override fun getAllListCourier(): Flow<Resource<List<Courier>>> =
         object : NetworkBoundResource<List<Courier>, ListCourierResponse>() {

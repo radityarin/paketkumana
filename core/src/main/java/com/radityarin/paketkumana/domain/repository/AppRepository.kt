@@ -7,7 +7,8 @@ import com.radityarin.paketkumana.data.source.remote.response.cekresi.CekResiRes
 import com.radityarin.paketkumana.domain.model.Courier
 import kotlinx.coroutines.flow.Flow
 
-interface IAppRepository {
+interface AppRepository {
+
     fun getAllListCourier(): Flow<Resource<List<Courier>>>
 
     suspend fun getCekResi(

@@ -1,13 +1,12 @@
 package com.radityarin.paketkumana.di
 
 import androidx.room.Room
-import com.radityarin.paketkumana.data.AppRepository
+import com.radityarin.paketkumana.data.AppRepositoryImpl
 import com.radityarin.paketkumana.data.source.local.LocalDataSource
 import com.radityarin.paketkumana.data.source.local.room.AppDatabase
 import com.radityarin.paketkumana.data.source.remote.RemoteDataSource
 import com.radityarin.paketkumana.data.source.remote.network.ApiService
-import com.radityarin.paketkumana.domain.repository.IAppRepository
-import com.radityarin.paketkumana.utils.AppExecutors
+import com.radityarin.paketkumana.domain.repository.AppRepository
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 import okhttp3.OkHttpClient
@@ -59,10 +58,8 @@ val networkModule = module {
 val repositoryModule = module {
     single { LocalDataSource(get()) }
     single { RemoteDataSource(get(), get()) }
-    single { AppExecutors() }
-    single<IAppRepository> {
-        AppRepository(
-            get(),
+    single<AppRepository> {
+        AppRepositoryImpl(
             get(),
             get()
         )
